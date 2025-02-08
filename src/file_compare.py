@@ -138,7 +138,7 @@ class FileCompare(QMainWindow):
         self.gold_path.setStyleSheet('')
         self.new_path.setStyleSheet('')
 
-    def close_action():
+    def close_action(*args, **kwargs):
         QApplication.quit()
 
     def readfile(self, filename) -> list:
