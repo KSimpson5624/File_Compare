@@ -1,0 +1,20 @@
+# Python files
+
+__pycache__/
+
+# VS Code files
+
+.vscode/
+
+# MacOS files
+
+.DS_Store
+
+# Logs
+
+*.log
+
+# My test arena
+
+sandbox
+
