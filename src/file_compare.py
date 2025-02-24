@@ -9,6 +9,15 @@ class FileCompare(QMainWindow):
     def __init__(self):
         super().__init__()
         self.window()
+        self.gold_path = None
+        self.new_path = None
+        self.gold_error = None
+        self.new_error = None
+        self.text_browser = None
+        self.compare_button = None
+        self.reset_button = None
+        self.close_button = None
+
 
     def window(self):
         
