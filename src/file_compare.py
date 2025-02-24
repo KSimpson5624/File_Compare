@@ -1,6 +1,7 @@
 
 
-from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget, QPushButton, QVBoxLayout, QLineEdit, QHBoxLayout, QLabel, QTextBrowser
+from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget, QPushButton, QVBoxLayout, QLineEdit, QHBoxLayout, \
+    QLabel, QTextBrowser, QFileDialog
 import sys
 import os
 
@@ -8,66 +9,74 @@ import os
 class FileCompare(QMainWindow):
     def __init__(self):
         super().__init__()
-        self.window()
-        self.gold_path = None
-        self.new_path = None
-        self.gold_error = None
-        self.new_error = None
-        self.text_browser = None
-        self.compare_button = None
-        self.reset_button = None
-        self.close_button = None
 
+        # All UI elements here
+        # Line edits
+        self.gold_path = QLineEdit()
+        self.new_path = QLineEdit()
+        self.gold_error = QLabel('')
+        self.new_error = QLabel('')
 
-    def window(self):
+        # Text box
+        self.text_browser = QTextBrowser()
+
+        #Buttons
+        self.compare_button = QPushButton('Compare')
+        self.reset_button = QPushButton('Reset')
+        self.close_button = QPushButton('Close')
+        self.open_gold_button = QPushButton('+')
+        self.open_new_button = QPushButton('+')
+
+        self.setup_window()
+
+    def setup_window(self):
         
         self.setMinimumSize(800,800)
         self.setWindowTitle('File Compare')
 
-        #Layout boxes
-        layout = QVBoxLayout()
-        button_row = QHBoxLayout()
-
         # File name input
-        self.gold_path = QLineEdit()
         self.gold_path.setPlaceholderText('Enter Gold file path...')
         self.gold_path.setAcceptDrops(True)
         self.gold_path.dragEnterEvent = self.dragEnterEvent
         self.gold_path.dropEvent = lambda event: self.dropEvent(event, self.gold_path)
 
-        self.new_path = QLineEdit()
         self.new_path.setPlaceholderText('Enter New file path...')
         self.new_path.setAcceptDrops(True)
         self.new_path.dragEnterEvent = self.dragEnterEvent
         self.new_path.dropEvent = lambda event: self.dropEvent(event, self.new_path)
 
         # Error Labels
-        self.gold_error = QLabel('')
         self.gold_error.setStyleSheet('color: red;')
-        self.new_error = QLabel('')
         self.new_error.setStyleSheet('color: red;')
 
         # Text Box
         self.text_browser = QTextBrowser()
 
-        # Buttons
-        self.compare_button = QPushButton('Compare')
-        self.compare_button.setDisabled(True)
-        self.reset_button = QPushButton('Reset')
-        self.close_button = QPushButton('Close')
-
         # Button Actions
+        self.compare_button.setDisabled(True)
         self.compare_button.clicked.connect(self.compare_action)
         self.reset_button.clicked.connect(self.reset_action)
         self.close_button.clicked.connect(self.close_action)
+        self.open_gold_button.clicked.connect(self.open_file_dialog_action)
+        self.open_new_button.clicked.connect(self.open_file_dialog_action)
+
+        # Layout boxes
+        layout = QVBoxLayout()
+        gold_layout = QHBoxLayout()
+        new_layout = QHBoxLayout()
+        button_row = QHBoxLayout()
 
         # Layout
-        layout.addWidget(QLabel('Gold Path:'))
-        layout.addWidget(self.gold_path)
-        layout.addWidget(self.gold_error)
-        layout.addWidget(QLabel('New Path:'))
-        layout.addWidget(self.new_path)
-        layout.addWidget(self.new_error)
+        gold_layout.addWidget(QLabel('Gold Path:'))
+        gold_layout.addWidget(self.gold_path)
+        gold_layout.addWidget(self.gold_error)
+        gold_layout.addWidget(self.open_gold_button)
+        new_layout.addWidget(QLabel('New Path:'))
+        new_layout.addWidget(self.new_path)
+        new_layout.addWidget(self.new_error)
+        new_layout.addWidget(self.open_new_button)
+        layout.addLayout(gold_layout)
+        layout.addLayout(new_layout)
         layout.addWidget(self.text_browser)
         button_row.addWidget(self.close_button)
         button_row.addWidget(self.reset_button)
@@ -147,7 +156,18 @@ class FileCompare(QMainWindow):
         self.gold_path.setStyleSheet('')
         self.new_path.setStyleSheet('')
 
-    def close_action(*args, **kwargs):
+    def open_file_dialog_action(self):
+        sender = self.sender()
+        options = QFileDialog.Options()
+        file_path, _ = QFileDialog.getOpenFileName(self, 'Open File', "", "All Files (*);;Text Files (*.txt)", options=options)
+
+        if file_path:
+            if sender == self.open_gold_button:
+                self.gold_path.setText(file_path)
+            elif sender == self.open_new_button:
+                self.new_path.setText(file_path)
+
+    def close_action(self, *args, **kwargs):
         QApplication.quit()
 
     def readfile(self, filename) -> list:
