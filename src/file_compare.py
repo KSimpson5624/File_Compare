@@ -1,7 +1,8 @@
 
 
 from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget, QPushButton, QVBoxLayout, QLineEdit, QHBoxLayout, \
-    QLabel, QTextBrowser, QFileDialog
+    QLabel, QTextBrowser, QFileDialog, QToolTip
+from PyQt5.QtCore import QFile, QTextStream, QTimer
 import sys
 import os
 
@@ -27,7 +28,27 @@ class FileCompare(QMainWindow):
         self.open_gold_button = QPushButton('+')
         self.open_new_button = QPushButton('+')
 
+        # Button properties
+        self.compare_button.setProperty('bottom_row', True)
+        self.reset_button.setProperty('bottom_row', True)
+        self.close_button.setProperty('bottom_row', True)
+        self.open_gold_button.setProperty('file_button', True)
+        self.open_new_button.setProperty('file_button', True)
+
+        # Tool tips
+        self.compare_button.setToolTip('Compares two files')
+        self.reset_button.setToolTip('Resets all data')
+        self.close_button.setToolTip('Exits program')
+        self.open_gold_button.setToolTip('Searches for gold files')
+        self.open_new_button.setToolTip('Searches for new files')
+
         self.setup_window()
+
+        # Calling Stylesheet
+        self.apply_stylesheet()
+
+        # Reloading stylesheet every second for debugging
+        self.reload_stylesheet()
 
     def setup_window(self):
         
@@ -142,8 +163,11 @@ class FileCompare(QMainWindow):
             if line_ not in gold_lines:
                 unique_lines.append(f'New: {line_}')
 
-        for text in unique_lines:
-            data += f'{text}\n'
+        if unique_lines:
+            for text in unique_lines:
+                data += f'{text}\n'
+        else:
+            data += 'These files are identical!'
 
         self.text_browser.setText(data)
 
@@ -175,6 +199,17 @@ class FileCompare(QMainWindow):
             lines = inputfile.readlines()
 
         return lines
+
+    def apply_stylesheet(self):
+        qss_path = os.path.join(os.path.dirname(__file__), '../resources/styles.qss')
+
+        with open(qss_path, 'r') as qss_file:
+            self.setStyleSheet(qss_file.read())
+
+    def reload_stylesheet(self):
+        self.timer = QTimer()
+        self.timer.timeout.connect(self.apply_stylesheet)
+        self.timer.start(1000)
     
 if __name__ == '__main__':
     try:
