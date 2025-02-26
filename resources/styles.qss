@@ -1,0 +1,32 @@
+QWidget {
+    background-color: #2b2b2b;
+    color: #ffffff;
+}
+
+QTextBrowser {
+    background-color: rgb(58, 57, 57);
+    color: #ffffff;
+}
+
+QPushButton[file_button="true"] {
+    background-color: #3e3d3d;
+    
+}
+
+QPushButton[bottom_row="true"] {
+    border: 2px solid #ffffff;
+    border-radius: 5px;
+}
+
+QPushButton:hover {
+    color: #cccccc;
+}
+
+QPushButton:disabled {
+    color: gray;
+}
+
+QToolTip {
+    background-color: rgb(80, 80, 80);
+    color: #ffffff;
+}
