@@ -1,7 +1,7 @@
 
 
 from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget, QPushButton, QVBoxLayout, QLineEdit, QHBoxLayout, \
-    QLabel, QTextBrowser, QFileDialog, QToolTip
+    QLabel, QTextBrowser, QFileDialog, QToolTip, QMenu, QMenuBar, QAction
 from PyQt5.QtCore import QFile, QTextStream, QTimer
 import sys
 import os
@@ -43,6 +43,7 @@ class FileCompare(QMainWindow):
         self.open_new_button.setToolTip('Searches for new files')
 
         self.setup_window()
+        self.setup_menu()
 
         # Calling Stylesheet
         self.apply_stylesheet()
@@ -78,8 +79,8 @@ class FileCompare(QMainWindow):
         self.compare_button.clicked.connect(self.compare_action)
         self.reset_button.clicked.connect(self.reset_action)
         self.close_button.clicked.connect(self.close_action)
-        self.open_gold_button.clicked.connect(self.open_file_dialog_action)
-        self.open_new_button.clicked.connect(self.open_file_dialog_action)
+        self.open_gold_button.clicked.connect(lambda: self.open_file_dialog_action('gold'))
+        self.open_new_button.clicked.connect(lambda: self.open_file_dialog_action('new'))
 
         # Layout boxes
         layout = QVBoxLayout()
@@ -110,6 +111,24 @@ class FileCompare(QMainWindow):
         # Signals and Slots
         self.gold_path.textChanged.connect(self.check_inputs)
         self.new_path.textChanged.connect(self.check_inputs)
+
+    def setup_menu(self):
+        menu = self.menuBar()
+        menu.setNativeMenuBar(False)
+
+        # Adding file menu items
+        file_menu = menu.addMenu('File')
+        add_gold_item = file_menu.addAction('Add Gold File')
+        add_new_item = file_menu.addAction('Add New File')
+        reset_item = file_menu.addAction('Reset')
+        close_item = file_menu.addAction('Close')
+
+        # Adding actions for file menu items
+        add_gold_item.triggered.connect(lambda: self.open_file_dialog_action('gold'))
+        add_new_item.triggered.connect(lambda: self.open_file_dialog_action('new'))
+        reset_item.triggered.connect(self.reset_action)
+        close_item.triggered.connect(self.close_action)
+
 
     def check_inputs(self):
         gold_path_filled = bool(self.gold_path.text().strip())
@@ -180,15 +199,14 @@ class FileCompare(QMainWindow):
         self.gold_path.setStyleSheet('')
         self.new_path.setStyleSheet('')
 
-    def open_file_dialog_action(self):
-        sender = self.sender()
+    def open_file_dialog_action(self, target):
         options = QFileDialog.Options()
         file_path, _ = QFileDialog.getOpenFileName(self, 'Open File', "", "All Files (*);;Text Files (*.txt)", options=options)
 
         if file_path:
-            if sender == self.open_gold_button:
+            if target == 'gold':
                 self.gold_path.setText(file_path)
-            elif sender == self.open_new_button:
+            elif target == 'new':
                 self.new_path.setText(file_path)
 
     def close_action(self, *args, **kwargs):
