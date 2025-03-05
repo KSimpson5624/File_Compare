@@ -10,6 +10,7 @@ QTextBrowser {
 
 QPushButton[file_button="true"] {
     background-color: #3e3d3d;
+    border: 1px solid #ffffff;
     
 }
 
