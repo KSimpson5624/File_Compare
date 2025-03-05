@@ -6,10 +6,11 @@ from PyQt5.QtCore import QFile, QTextStream, QTimer
 import sys
 import os
 
-
 class FileCompare(QMainWindow):
     def __init__(self):
         super().__init__()
+        # Debugging. Set to true when debugging
+        self.DEBUG = False
 
         # All UI elements here
         # Line edits
@@ -26,7 +27,9 @@ class FileCompare(QMainWindow):
         self.reset_button = QPushButton('Reset')
         self.close_button = QPushButton('Close')
         self.open_gold_button = QPushButton('+')
+        self.open_gold_button.setMinimumSize(70, 25)
         self.open_new_button = QPushButton('+')
+        self.open_new_button.setMinimumSize(70, 25)
 
         # Button properties
         self.compare_button.setProperty('bottom_row', True)
@@ -49,7 +52,8 @@ class FileCompare(QMainWindow):
         self.apply_stylesheet()
 
         # Reloading stylesheet every second for debugging
-        self.reload_stylesheet()
+        if self.DEBUG:
+            self.reload_stylesheet()
 
     def setup_window(self):
         
@@ -128,6 +132,16 @@ class FileCompare(QMainWindow):
         add_new_item.triggered.connect(lambda: self.open_file_dialog_action('new'))
         reset_item.triggered.connect(self.reset_action)
         close_item.triggered.connect(self.close_action)
+
+        # Adding settings menu
+        settings_menu = menu.addMenu('Settings')
+        theme_menu = settings_menu.addMenu('Theme')
+        dark_theme_item = theme_menu.addAction('Dark Theme')
+        light_theme_item = theme_menu.addAction('Light Theme')
+
+        # Adding actions for settings menu items
+        dark_theme_item.triggered.connect(lambda: self.apply_stylesheet('dark'))
+        light_theme_item.triggered.connect(lambda: self.apply_stylesheet('light'))
 
 
     def check_inputs(self):
@@ -218,8 +232,8 @@ class FileCompare(QMainWindow):
 
         return lines
 
-    def apply_stylesheet(self):
-        qss_path = os.path.join(os.path.dirname(__file__), '../resources/styles.qss')
+    def apply_stylesheet(self, theme='dark'):
+        qss_path = os.path.join(os.path.dirname(__file__), f'../resources/{theme}.qss')
 
         with open(qss_path, 'r') as qss_file:
             self.setStyleSheet(qss_file.read())
