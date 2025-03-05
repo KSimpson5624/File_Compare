@@ -1,0 +1,37 @@
+QWidget {
+    background-color: #d0d0d0;
+    color: #2b2b2b;
+}
+
+QLineEdit {
+    border: 1px solid #2b2b2b;
+}
+
+QTextBrowser {
+    background-color: #d2d2d2;
+    color: rgb(58, 57, 57);
+}
+
+QPushButton[file_button="true"] {
+    background-color: #d0d0d0;
+    border: 1px solid #2b2b2b;
+    
+}
+
+QPushButton[bottom_row="true"] {
+    border: 2px solid #2b2b2b;
+    border-radius: 5px;
+}
+
+QPushButton:hover {
+    color: #7f7f7f;
+}
+
+QPushButton:disabled {
+    color: gray;
+}
+
+QToolTip {
+    background-color: #ffffff;
+    color: rgb(80, 80, 80);
+}
