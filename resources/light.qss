@@ -8,7 +8,7 @@ QLineEdit {
 }
 
 QTextBrowser {
-    background-color: #d2d2d2;
+    background-color: #dfdfdf;
     color: rgb(58, 57, 57);
 }
 
@@ -24,14 +24,30 @@ QPushButton[bottom_row="true"] {
 }
 
 QPushButton:hover {
-    color: #7f7f7f;
+    background-color: #929292;
 }
 
 QPushButton:disabled {
-    color: gray;
+    background-color: rgb(151, 151, 151);
+    color: rgb(70, 70, 70);
 }
 
 QToolTip {
     background-color: #ffffff;
     color: rgb(80, 80, 80);
+}
+
+QMenu { 
+    background-color: #d0d0d0;
+    color: #2b2b2b;
+    border: 1px solid #555;
+}
+
+QMenu::item {
+    background-color: transparent;
+}
+
+QMenu::item:selected {
+    background-color: #50575d;
+    color: #ffffff
 }
