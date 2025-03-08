@@ -301,15 +301,8 @@ if __name__ == '__main__':
         app = QApplication(sys.argv)
         app.setApplicationName('File Compare')
         app.setWindowIcon(QIcon('../resources/icon.ico'))
-        splash = QSplashScreen(QPixmap('../resources/icon.png'))
-        splash.show()
-        for i in range(1, 6):
-            splash.showMessage(f'Loading... {i * 20}%', alignment=Qt.AlignBottom | Qt.AlignCenter)
-            time.sleep(1)
-
         window = FileCompare()
         window.show()
-        splash.finish(window)
         sys.exit(app.exec_())
     except Exception as e:
         print(f'An error occurred: {e}')
