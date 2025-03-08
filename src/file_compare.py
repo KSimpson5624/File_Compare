@@ -214,7 +214,7 @@ class FileCompare(QMainWindow):
 
     def open_file_dialog_action(self, target):
         options = QFileDialog.Options()
-        file_path, _ = QFileDialog.getOpenFileName(self, 'Open File', "", "All Files (*);;Text Files (*.txt)", options=options)
+        file_path, _ = QFileDialog.getOpenFileName(self, 'Open File', "", "All Files (*);;Text Files (*.txt);;Python Files (*.py)", options=options)
 
         if file_path:
             if target == 'gold':
