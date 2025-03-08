@@ -1,7 +1,9 @@
-from PyQt5.QtGui import QIcon
+import time
+
+from PyQt5.QtGui import QIcon, QPixmap
 from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget, QPushButton, QVBoxLayout, QLineEdit, QHBoxLayout, \
-    QLabel, QTextBrowser, QFileDialog, QToolTip, QMenu, QMenuBar, QAction
-from PyQt5.QtCore import QFile, QTextStream, QTimer
+    QLabel, QTextBrowser, QFileDialog, QToolTip, QMenu, QMenuBar, QAction, QMessageBox, QSplashScreen
+from PyQt5.QtCore import QFile, QTextStream, QTimer, Qt
 import sys
 import os
 import configparser
@@ -140,6 +142,13 @@ class FileCompare(QMainWindow):
         dark_theme_item.triggered.connect(lambda: self.apply_stylesheet('dark'))
         light_theme_item.triggered.connect(lambda: self.apply_stylesheet('light'))
 
+        # Adding Help menu
+        help_menu = menu.addMenu('Help')
+        about_action = help_menu.addAction('About')
+
+        # Adding actions for help menu
+        about_action.triggered.connect(lambda: self.show_about_dialog())
+
     def setup_icon(self):
         self.setWindowIcon(QIcon('../resources/icon.ico'))
 
@@ -222,6 +231,9 @@ class FileCompare(QMainWindow):
             elif target == 'new':
                 self.new_path.setText(file_path)
 
+    def show_about_dialog(self):
+        QMessageBox.about(self, 'About File Compare', 'File Compare Version 2.0\n\nA simple file comparison tool.\nCreated by Kyle Simpson.')
+
     @staticmethod
     def close_action(*args, **kwargs):
         QApplication.quit()
@@ -289,8 +301,15 @@ if __name__ == '__main__':
         app = QApplication(sys.argv)
         app.setApplicationName('File Compare')
         app.setWindowIcon(QIcon('../resources/icon.ico'))
+        splash = QSplashScreen(QPixmap('../resources/icon.png'))
+        splash.show()
+        for i in range(1, 6):
+            splash.showMessage(f'Loading... {i * 20}%', alignment=Qt.AlignBottom | Qt.AlignCenter)
+            time.sleep(1)
+
         window = FileCompare()
         window.show()
+        splash.finish(window)
         sys.exit(app.exec_())
     except Exception as e:
         print(f'An error occurred: {e}')
