@@ -1,16 +1,15 @@
-
-
+from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget, QPushButton, QVBoxLayout, QLineEdit, QHBoxLayout, \
     QLabel, QTextBrowser, QFileDialog, QToolTip, QMenu, QMenuBar, QAction
 from PyQt5.QtCore import QFile, QTextStream, QTimer
 import sys
 import os
+import configparser
+
 
 class FileCompare(QMainWindow):
     def __init__(self):
         super().__init__()
-        # Debugging. Set to true when debugging
-        self.DEBUG = False
 
         # All UI elements here
         # Line edits
@@ -47,13 +46,11 @@ class FileCompare(QMainWindow):
 
         self.setup_window()
         self.setup_menu()
+        self.setup_icon()
+
 
         # Calling Stylesheet
-        self.apply_stylesheet()
-
-        # Reloading stylesheet every second for debugging
-        if self.DEBUG:
-            self.reload_stylesheet()
+        self.load_theme()
 
     def setup_window(self):
         
@@ -143,6 +140,8 @@ class FileCompare(QMainWindow):
         dark_theme_item.triggered.connect(lambda: self.apply_stylesheet('dark'))
         light_theme_item.triggered.connect(lambda: self.apply_stylesheet('light'))
 
+    def setup_icon(self):
+        self.setWindowIcon(QIcon('../resources/icon.ico'))
 
     def check_inputs(self):
         gold_path_filled = bool(self.gold_path.text().strip())
@@ -223,30 +222,64 @@ class FileCompare(QMainWindow):
             elif target == 'new':
                 self.new_path.setText(file_path)
 
-    def close_action(self, *args, **kwargs):
+    @staticmethod
+    def close_action(*args, **kwargs):
         QApplication.quit()
 
-    def readfile(self, filename) -> list:
+    @staticmethod
+    def readfile(filename) -> list:
         with open(filename, 'r') as inputfile:
             lines = inputfile.readlines()
 
         return lines
 
-    def apply_stylesheet(self, theme='dark'):
-        qss_path = os.path.join(os.path.dirname(__file__), f'../resources/{theme}.qss')
+    def apply_stylesheet(self, theme):
+        theme_path = os.path.join(os.path.dirname(__file__), f'../resources/{theme}.qss')
 
-        with open(qss_path, 'r') as qss_file:
-            self.setStyleSheet(qss_file.read())
+        if os.path.isfile(theme_path):
+            with open(theme_path, 'r') as theme_file:
+                self.setStyleSheet(theme_file.read())
+
+            self.save_theme(theme)
+
+    def load_theme(self):
+        config = configparser.ConfigParser()
+        config_path = os.path.join(os.path.dirname(__file__), f'../resources/config.ini')
+
+        if os.path.isfile(config_path):
+            config.read(config_path)
+            theme = config.get('Settings', 'theme', fallback='dark')
+        else:
+            theme = 'dark'
+        self.apply_stylesheet(theme)
+
+    @staticmethod
+    def save_theme(theme):
+        config = configparser.ConfigParser()
+        config_path = os.path.join(os.path.dirname(__file__), f'../resources/config.ini')
+
+        config.read(config_path)
+
+        if "Settings" not in config:
+            config['Settings'] = {}
+
+        config['Settings']['theme'] = theme
+
+        with open(config_path, 'w') as configfile:
+            config.write(configfile)
+
 
     def reload_stylesheet(self):
         self.timer = QTimer()
-        self.timer.timeout.connect(self.apply_stylesheet)
+        self.timer.timeout.connect(self.apply_stylesheet, 'dark')
         self.timer.start(1000)
+
     
 if __name__ == '__main__':
     try:
         app = QApplication(sys.argv)
         app.setApplicationName('File Compare')
+        app.setWindowIcon(QIcon('../resources/icon.ico'))
         window = FileCompare()
         window.show()
         sys.exit(app.exec_())
