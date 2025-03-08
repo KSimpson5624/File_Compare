@@ -228,11 +228,20 @@ class FileCompare(QMainWindow):
 
     @staticmethod
     def readfile(filename) -> list:
-        with open(filename, 'r') as inputfile:
-            lines = inputfile.readlines()
+        try:
+            with open(filename, 'r') as inputfile:
+                lines = inputfile.readlines()
+
+        except FileNotFoundError:
+            lines = ['File not found']
+        except PermissionError:
+            lines = ['Permission denied']
+        except UnicodeDecodeError:
+            lines = ['UnicodeDecodeError: Invalid file. File must be UTF-8']
+        except Exception as error:
+            lines = ['Error: ' + str(error)]
 
         return lines
-
     def apply_stylesheet(self, theme):
         theme_path = os.path.join(os.path.dirname(__file__), f'../resources/{theme}.qss')
 
