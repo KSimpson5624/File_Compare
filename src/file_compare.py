@@ -1,9 +1,7 @@
-import time
-
-from PyQt5.QtGui import QIcon, QPixmap
+from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget, QPushButton, QVBoxLayout, QLineEdit, QHBoxLayout, \
-    QLabel, QTextBrowser, QFileDialog, QToolTip, QMenu, QMenuBar, QAction, QMessageBox, QSplashScreen
-from PyQt5.QtCore import QFile, QTextStream, QTimer, Qt
+    QLabel, QTextBrowser, QFileDialog, QToolTip, QMenu, QMenuBar, QMessageBox
+from PyQt5.QtCore import QTimer
 import sys
 import os
 import configparser
