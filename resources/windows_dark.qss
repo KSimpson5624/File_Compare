@@ -1,0 +1,76 @@
+QMainWindow { 
+    background-color: #2b2b2b;
+}
+
+QWidget {
+    background-color: #2b2b2b;
+    color: #ffffff;
+}
+
+QLineEdit {
+    border: 1px solid #3e3d3d;
+}
+
+QTextBrowser {
+    background-color: rgb(58, 57, 57);
+    color: #ffffff;
+    border: 1px solid #2b2b2b;
+}
+
+QPushButton[file_button="true"] {
+    background-color: #3e3d3d;
+    border: 1px solid #ffffff;
+    
+}
+
+QPushButton[bottom_row="true"] {
+    border: 2px solid #ffffff;
+    border-radius: 5px;
+}
+
+QPushButton:hover {
+    background-color: #676767;
+}
+
+QPushButton:disabled {
+    background-color: #686767;
+    color: rgb(137, 137, 137);
+}
+
+menuBar:hover {
+    color: #cccccc;
+}
+
+QToolTip {
+    background-color: rgb(80, 80, 80);
+    color: #ffffff;
+}
+
+QMenu { 
+    background-color: #2b2b2b;
+    color: white;
+    border: 1px solid #555;
+}
+
+QMenu::item {
+    background-color: transparent;
+}
+
+QMenu::item:selected {
+    background-color: #50575d;
+    color: #ffffff
+}
+
+QMenuBar {
+    background-color: #2b2b2b;
+    color: white;
+}
+
+QMenuBar::item:selected {
+    background-color: #50575d;
+    color: white;
+}
+
+QMenuBar::item {
+    background-color: transparent;
+}
