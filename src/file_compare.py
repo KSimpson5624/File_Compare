@@ -115,7 +115,6 @@ class FileCompare(QMainWindow):
 
     def setup_menu(self):
         menu = self.menuBar()
-        menu.setNativeMenuBar(False)
 
         # Adding file menu items
         file_menu = menu.addMenu('File')
