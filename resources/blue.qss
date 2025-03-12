@@ -1,0 +1,22 @@
+#Container {
+    background: qlineargradient(x1:0 y1:0, x2:1 y2:1, stop:0 #051c2a stop:1 #44315f);
+    border-radius: 5px;
+}
+
+QTextBrowser {
+    background: qlineargradient(x1:0 y1:0, x2:1 y2:1, stop:0 #051c2a stop:1 #44315f);
+    border-radius: 5px;
+}
+
+QToolButton {
+    border: none;
+    padding: 2px;
+}
+
+QMainWindow {
+    padding: 10px;
+}
+
+QLabel {
+    margin-left: 5px;
+}

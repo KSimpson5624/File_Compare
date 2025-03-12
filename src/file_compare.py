@@ -1,10 +1,11 @@
 from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget, QPushButton, QVBoxLayout, QLineEdit, QHBoxLayout, \
     QLabel, QTextBrowser, QFileDialog, QToolTip, QMenu, QMenuBar, QMessageBox
-from PyQt5.QtCore import QTimer
+from PyQt5.QtCore import QTimer, Qt, QEvent
 import sys
 import os
 import configparser
+from custom_title_bar import CustomTitleBar
 
 
 class FileCompare(QMainWindow):
@@ -56,6 +57,17 @@ class FileCompare(QMainWindow):
         
         self.setMinimumSize(800,800)
         self.setWindowTitle('File Compare')
+        ###########################################
+        self.setWindowFlags(Qt.FramelessWindowHint)
+        self.setAttribute(Qt.WA_TranslucentBackground)
+
+        self.title_bar = CustomTitleBar(self)
+        central_widget = QWidget()
+        central_widget.setObjectName("Container")
+        main_layout = QVBoxLayout()
+        main_layout.setContentsMargins(0,0,0,0)
+        main_layout.addWidget(self.title_bar)
+        #############################################
 
         # File name input
         self.gold_path.setPlaceholderText('Enter Gold file path...')
@@ -84,7 +96,7 @@ class FileCompare(QMainWindow):
         self.open_new_button.clicked.connect(lambda: self.open_file_dialog_action('new'))
 
         # Layout boxes
-        layout = QVBoxLayout()
+        #layout = QVBoxLayout()
         gold_layout = QHBoxLayout()
         new_layout = QHBoxLayout()
         button_row = QHBoxLayout()
@@ -98,16 +110,15 @@ class FileCompare(QMainWindow):
         new_layout.addWidget(self.new_path)
         new_layout.addWidget(self.new_error)
         new_layout.addWidget(self.open_new_button)
-        layout.addLayout(gold_layout)
-        layout.addLayout(new_layout)
-        layout.addWidget(self.text_browser)
+        main_layout.addLayout(gold_layout)
+        main_layout.addLayout(new_layout)
+        main_layout.addWidget(self.text_browser)
         button_row.addWidget(self.close_button)
         button_row.addWidget(self.reset_button)
         button_row.addWidget(self.compare_button)
-        layout.addLayout(button_row)
-        widget = QWidget()
-        widget.setLayout(layout)
-        self.setCentralWidget(widget)
+        main_layout.addLayout(button_row)
+        central_widget.setLayout(main_layout)
+        self.setCentralWidget(central_widget)
 
         # Signals and Slots
         self.gold_path.textChanged.connect(self.check_inputs)
@@ -134,10 +145,12 @@ class FileCompare(QMainWindow):
         theme_menu = settings_menu.addMenu('Theme')
         dark_theme_item = theme_menu.addAction('Dark Theme')
         light_theme_item = theme_menu.addAction('Light Theme')
+        blue_theme_item = theme_menu.addAction('Blue Theme')
 
         # Adding actions for settings menu items
         dark_theme_item.triggered.connect(lambda: self.apply_stylesheet('dark'))
         light_theme_item.triggered.connect(lambda: self.apply_stylesheet('light'))
+        blue_theme_item.triggered.connect(lambda: self.apply_stylesheet('blue'))
 
         # Adding Help menu
         help_menu = menu.addMenu('Help')
