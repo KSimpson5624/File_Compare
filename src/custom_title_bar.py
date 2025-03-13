@@ -13,16 +13,17 @@ from PyQt5.QtWidgets import (
 
 
 class CustomTitleBar(QWidget):
-    def __init__(self, parent):
+    def __init__(self, name, parent):
         super().__init__(parent)        
         self.initial_pos = None
+        self.name = name
         title_bar_layout = QHBoxLayout(self)
         title_bar_layout.setContentsMargins(1, 1, 1, 1)
         title_bar_layout.setSpacing(2)
-        self.title = QLabel(f"{self.__class__.__name__}", self)
+        self.title = QLabel(f"{self.name}", self)
         self.title.setAlignment(Qt.AlignCenter)  # PyQt5 does not use AlignmentFlag
         self.title.setStyleSheet("""
-        QLabel { text-transform: uppercase; font-size: 10pt; margin-left: 48px; }        
+        QLabel { text-transform: uppercase; font-size: 12pt; margin-left: 48px; font-family: Copperplate; }        
         """)
     
         if title := parent.windowTitle():
@@ -32,28 +33,28 @@ class CustomTitleBar(QWidget):
         # Min button
         self.min_button = QToolButton(self)
         min_icon = QIcon()
-        min_icon.addFile('../resources/min.svg')
+        min_icon.addFile('../resources/icons/min.svg')
         self.min_button.setIcon(min_icon)
         self.min_button.clicked.connect(self.window().showMinimized)
 
         # Max button
         self.max_button = QToolButton(self)
         max_icon = QIcon()
-        max_icon.addFile('../resources/max.svg')
+        max_icon.addFile('../resources/icons/max.svg')
         self.max_button.setIcon(max_icon)
         self.max_button.clicked.connect(self.window().showMaximized)
 
         # Close button
         self.close_button = QToolButton(self)
         close_icon = QIcon()
-        close_icon.addFile('../resources/close.svg')
+        close_icon.addFile('../resources/icons/close.svg')
         self.close_button.setIcon(close_icon)
         self.close_button.clicked.connect(self.window().close)
         
         # Normal button
         self.normal_button = QToolButton(self)
         normal_icon = QIcon()
-        normal_icon.addFile('..resources/normal.svg')
+        normal_icon.addFile('../resources/icons/normal.svg')
         self.normal_button.setIcon(normal_icon)
         self.normal_button.clicked.connect(self.window().showNormal)
         self.normal_button.setVisible(False)

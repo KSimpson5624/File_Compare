@@ -12,6 +12,8 @@ class FileCompare(QMainWindow):
     def __init__(self):
         super().__init__()
 
+        self.initial_pos = None
+        self.title_bar = CustomTitleBar(parent=self, name='File Compare')
         # All UI elements here
         # Line edits
         self.gold_path = QLineEdit()
@@ -57,17 +59,15 @@ class FileCompare(QMainWindow):
         
         self.setMinimumSize(800,800)
         self.setWindowTitle('File Compare')
-        ###########################################
         self.setWindowFlags(Qt.FramelessWindowHint)
         self.setAttribute(Qt.WA_TranslucentBackground)
 
-        self.title_bar = CustomTitleBar(self)
+        #self.title_bar = CustomTitleBar(self)
         central_widget = QWidget()
         central_widget.setObjectName("Container")
         main_layout = QVBoxLayout()
         main_layout.setContentsMargins(0,0,0,0)
         main_layout.addWidget(self.title_bar)
-        #############################################
 
         # File name input
         self.gold_path.setPlaceholderText('Enter Gold file path...')
@@ -160,7 +160,7 @@ class FileCompare(QMainWindow):
         about_action.triggered.connect(lambda: self.show_about_dialog())
 
     def setup_icon(self):
-        self.setWindowIcon(QIcon('../resources/icon.ico'))
+        self.setWindowIcon(QIcon('../resources/icons/icon.ico'))
 
     def check_inputs(self):
         gold_path_filled = bool(self.gold_path.text().strip())
@@ -177,6 +177,34 @@ class FileCompare(QMainWindow):
         if event.mimeData().hasUrls():
             file_path = event.mimeData().urls()[0].toLocalFile()
             line_edit.setText(file_path)
+
+    def changeEvent(self, event):
+        if event.type() == QEvent.WindowStateChange:
+            self.title_bar.window_state_changed(self.windowState())
+        super().changeEvent(event)
+        event.accept()
+
+    def window_state_changed(self, state):
+        self.normal_button.setVisible(state == Qt.WindowMaximized)
+        self.max_button.setVisible(state != Qt.WindowMaximized)
+
+    def mousePressEvent(self, event):
+        if event.button() == Qt.LeftButton:
+            self.initial_pos = event.pos()
+        super().mousePressEvent(event)
+        event.accept()
+
+    def mouseMoveEvent(self, event):
+        if self.initial_pos is not None:
+            delta = event.pos() - self.initial_pos
+            self.window().move(self.window().x() + delta.x(), self.window().y() + delta.y())
+        super().mouseMoveEvent(event)
+        event.accept()
+
+    def mouseReleaseEvent(self, event):
+        self.initial_pos = None
+        super().mouseReleaseEvent(event)
+        event.accept()
 
     def compare_action(self):
         unique_lines = []
@@ -265,7 +293,7 @@ class FileCompare(QMainWindow):
 
         return lines
     def apply_stylesheet(self, theme):
-        theme_path = os.path.join(os.path.dirname(__file__), f'../resources/{theme}.qss')
+        theme_path = os.path.join(os.path.dirname(__file__), f'../resources/themes/{theme}.qss')
 
         if os.path.isfile(theme_path):
             with open(theme_path, 'r') as theme_file:
@@ -310,7 +338,7 @@ if __name__ == '__main__':
     try:
         app = QApplication(sys.argv)
         app.setApplicationName('File Compare')
-        app.setWindowIcon(QIcon('../resources/icon.ico'))
+        app.setWindowIcon(QIcon('../resources/icons/icon.ico'))
         window = FileCompare()
         window.show()
         sys.exit(app.exec_())
