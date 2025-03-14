@@ -15,17 +15,20 @@ QTextBrowser {
     background-color: rgb(58, 57, 57);
     color: #ffffff;
     border: 1px solid #2b2b2b;
+    margin: 10px;
 }
 
 QPushButton[file_button="true"] {
     background-color: #3e3d3d;
     border: 1px solid #ffffff;
+    margin-right: 10px;
     
 }
 
 QPushButton[bottom_row="true"] {
     border: 2px solid #ffffff;
     border-radius: 5px;
+    margin-bottom: 10px;
 }
 
 QPushButton:hover {
@@ -73,4 +76,17 @@ QMenuBar::item:selected {
 
 QMenuBar::item {
     background-color: transparent;
+}
+
+QLabel {
+    margin-left: 5px;
+}
+
+QMainWindow {
+    padding: 10px;
+    border-radius: 10px;
+}
+
+#Container {
+    border-radius: 10px;
 }

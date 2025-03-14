@@ -15,6 +15,7 @@ class FileCompare(QMainWindow):
 
         self.initial_pos = None
         self.title_bar = CustomTitleBar(parent=self, name='File Compare')
+        self.menu = self.menuBar()
         # All UI elements here
         # Line edits
         self.gold_path = QLineEdit()
@@ -69,6 +70,8 @@ class FileCompare(QMainWindow):
         main_layout = QVBoxLayout()
         main_layout.setContentsMargins(0,0,0,0)
         main_layout.addWidget(self.title_bar)
+        if platform.system() == 'Windows':
+            main_layout.addWidget(self.menu)
 
         # File name input
         self.gold_path.setPlaceholderText('Enter Gold file path...')
@@ -126,10 +129,10 @@ class FileCompare(QMainWindow):
         self.new_path.textChanged.connect(self.check_inputs)
 
     def setup_menu(self):
-        menu = self.menuBar()
+        
 
         # Adding file menu items
-        file_menu = menu.addMenu('File')
+        file_menu = self.menu.addMenu('File')
         add_gold_item = file_menu.addAction('Add Gold File')
         add_new_item = file_menu.addAction('Add New File')
         reset_item = file_menu.addAction('Reset')
@@ -142,19 +145,19 @@ class FileCompare(QMainWindow):
         close_item.triggered.connect(self.close_action)
 
         # Adding settings menu
-        settings_menu = menu.addMenu('Settings')
+        settings_menu = self.menu.addMenu('Settings')
         theme_menu = settings_menu.addMenu('Theme')
         dark_theme_item = theme_menu.addAction('Dark Theme')
         light_theme_item = theme_menu.addAction('Light Theme')
-        blue_theme_item = theme_menu.addAction('Blue Theme')
+        blue_theme_item = theme_menu.addAction('Purple Theme')
 
         # Adding actions for settings menu items
         dark_theme_item.triggered.connect(lambda: self.apply_stylesheet('dark'))
         light_theme_item.triggered.connect(lambda: self.apply_stylesheet('light'))
-        blue_theme_item.triggered.connect(lambda: self.apply_stylesheet('blue'))
+        blue_theme_item.triggered.connect(lambda: self.apply_stylesheet('purple'))
 
         # Adding Help menu
-        help_menu = menu.addMenu('Help')
+        help_menu = self.menu.addMenu('Help')
         about_action = help_menu.addAction('About')
 
         # Adding actions for help menu
@@ -294,7 +297,10 @@ class FileCompare(QMainWindow):
 
         return lines
     def apply_stylesheet(self, theme):
-        theme_path = os.path.join(os.path.dirname(__file__), f'../resources/themes/{theme}.qss')
+        if platform.system() == 'Windows':
+            theme_path = os.path.join(os.path.dirname(__file__), f'../resources/themes/windows_{theme}.qss')
+        else:
+            theme_path = os.path.join(os.path.dirname(__file__), f'../resources/themes/{theme}.qss')
 
         if os.path.isfile(theme_path):
             with open(theme_path, 'r') as theme_file:
