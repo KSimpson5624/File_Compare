@@ -5,6 +5,7 @@ from PyQt5.QtCore import QTimer, Qt, QEvent
 import sys
 import os
 import configparser
+import platform
 from custom_title_bar import CustomTitleBar
 
 
@@ -57,7 +58,7 @@ class FileCompare(QMainWindow):
 
     def setup_window(self):
         
-        self.setMinimumSize(800,800)
+        self.setMinimumSize(800,900)
         self.setWindowTitle('File Compare')
         self.setWindowFlags(Qt.FramelessWindowHint)
         self.setAttribute(Qt.WA_TranslucentBackground)

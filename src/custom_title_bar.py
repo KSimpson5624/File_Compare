@@ -10,6 +10,7 @@ from PyQt5.QtWidgets import (
     QVBoxLayout,
     QWidget,
 )
+import platform
 
 
 class CustomTitleBar(QWidget):
@@ -22,13 +23,19 @@ class CustomTitleBar(QWidget):
         title_bar_layout.setSpacing(2)
         self.title = QLabel(f"{self.name}", self)
         self.title.setAlignment(Qt.AlignCenter)  # PyQt5 does not use AlignmentFlag
-        self.title.setStyleSheet("""
-        QLabel { text-transform: uppercase; font-size: 12pt; margin-left: 48px; font-family: Copperplate; }        
-        """)
+        if platform.system() == 'Windows':
+            self.title.setStyleSheet("""
+                QLabel { text-transform: uppercase; font-size: 12pt; margin-left: 48px; font-family: Copperplate; }        
+                """)
+        if platform.system() == 'Darwin':
+            self.title.setStyleSheet("""
+                    QLabel { text-transform: uppercase; font-size: 12pt; margin-right: 70px; font-family: Copperplate; }        
+                    """)
     
         if title := parent.windowTitle():
             self.title.setText(title)
-        title_bar_layout.addWidget(self.title)    
+        if platform.system() == "Windows":
+            title_bar_layout.addWidget(self.title)
         
         # Min button
         self.min_button = QToolButton(self)
@@ -66,6 +73,8 @@ class CustomTitleBar(QWidget):
             self.max_button,
             self.close_button,
         ]
+        if platform.system() == "Darwin":
+            buttons.reverse()
         for button in buttons:
             button.setFocusPolicy(Qt.NoFocus)
             button.setFixedSize(QSize(16, 16))
@@ -76,7 +85,10 @@ class CustomTitleBar(QWidget):
                 }
                 """
             )
+
             title_bar_layout.addWidget(button)
+        if platform.system() == "Darwin":
+            title_bar_layout.addWidget(self.title)
 
     def window_state_changed(self, state):
         if state == Qt.WindowMaximized:
