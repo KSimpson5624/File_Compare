@@ -6,6 +6,7 @@ QWidget {
 QTextBrowser {
     background-color: rgb(58, 57, 57);
     color: #ffffff;
+    margin: 10px;
 }
 
 QPushButton[file_button="true"] {
@@ -61,6 +62,7 @@ QLabel {
 QMainWindow {
     padding: 10px;
     border-radius: 10px;
+    margin: 10px;
 }
 
 #Container {

@@ -10,6 +10,7 @@ QLineEdit {
 QTextBrowser {
     background-color: #dfdfdf;
     color: rgb(58, 57, 57);
+    margin: 10px;
 }
 
 QPushButton[file_button="true"] {
