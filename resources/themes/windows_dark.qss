@@ -9,6 +9,7 @@ QWidget {
 
 QLineEdit {
     border: 1px solid #3e3d3d;
+    background-color: rgb(58, 57, 57);
 }
 
 QTextBrowser {
