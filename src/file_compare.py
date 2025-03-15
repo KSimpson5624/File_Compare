@@ -296,6 +296,7 @@ class FileCompare(QMainWindow):
             lines = ['Error: ' + str(error)]
 
         return lines
+    
     def apply_stylesheet(self, theme):
         if platform.system() == 'Windows':
             theme_path = os.path.join(os.path.dirname(__file__), f'../resources/themes/windows_{theme}.qss')
