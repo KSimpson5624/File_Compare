@@ -6,6 +6,7 @@ import sys
 import os
 import configparser
 import platform
+from collections import Counter
 from source.custom_title_bar import CustomTitleBar
 
 
@@ -239,15 +240,20 @@ class FileCompare(QMainWindow):
         gold_lines = self.readfile(gold_path)
         new_lines = self.readfile(new_path)
 
-        for line in gold_lines:
-            if line not in new_lines:
-                unique_lines.append(f'Gold: {line}')
-        for line_ in new_lines:
-            if line_ not in gold_lines:
-                unique_lines.append(f'New: {line_}')
+        gold_count = Counter(gold_lines)
+        new_count = Counter(new_lines)
+        differences = []
 
-        if unique_lines:
-            for text in unique_lines:
+        gold_diff  = gold_count - new_count
+        new_diff = new_count - gold_count
+
+        for gold_line, gold_line_count in gold_diff.items():
+            differences.extend([f'New: {gold_line}'] * gold_line_count)
+        for new_line, new_line_count in new_diff.items():
+            differences.extend([f'New: {new_line}'] * new_line_count)
+
+        if differences:
+            for text in differences:
                 data += f'{text}\n'
         else:
             data += 'These files are identical!'
