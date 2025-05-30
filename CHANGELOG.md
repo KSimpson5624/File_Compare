@@ -1,4 +1,4 @@
-## [v3.0] - 2024-06-01
+## [v3.0] - 2025-05-29
 
 ### Changed
 - Rewrote file comparison logic to use `collections.Counter`.
